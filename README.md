@@ -1,149 +1,217 @@
-# WhatsApp SaaS - Sistema Completo de Chatbots
+# DashURX - Sistema SaaS de WhatsApp
 
-Este é um sistema completo de chatbots para WhatsApp desenvolvido como uma plataforma SaaS (Software as a Service). O sistema permite criar, gerenciar e configurar múltiplos bots de WhatsApp com interface visual para criação de fluxos de conversa.
+![DashURX Logo](https://img.shields.io/badge/DashURX-WhatsApp%20SaaS-25D366?style=for-the-badge&logo=whatsapp)
 
-## 🚀 Funcionalidades
+## 🚀 Visão Geral
 
-### Backend (Flask)
-- ✅ Sistema de autenticação e autorização JWT
-- ✅ APIs RESTful para gerenciamento de usuários
-- ✅ APIs para gerenciamento de bots (CRUD completo)
-- ✅ Sistema de fluxos de conversa com nós e conexões
-- ✅ Integração com WhatsApp Web.js
-- ✅ Gerenciamento de múltiplas instâncias de bots
-- ✅ Sistema de mensagens e histórico
-- ✅ Banco de dados SQLite com SQLAlchemy
+DashURX é uma plataforma SaaS completa para automação e gerenciamento de WhatsApp Business. O sistema permite criar, configurar e gerenciar múltiplos bots de WhatsApp com interface visual drag-and-drop para criação de fluxos de conversa.
 
-### Frontend (React)
-- ✅ Interface moderna e responsiva com Tailwind CSS
-- ✅ Sistema de autenticação (login/registro)
-- ✅ Dashboard com estatísticas e métricas
-- ✅ Gerenciamento visual de bots
-- ✅ Interface para configuração de fluxos
-- ✅ Tema escuro/claro
-- ✅ Componentes reutilizáveis com shadcn/ui
+## ✨ Funcionalidades Principais
 
-### Funcionalidades Principais
-- 🤖 Criação e gerenciamento de múltiplos bots
-- 💬 Sistema de fluxos de conversa visual
-- 📊 Dashboard com métricas e relatórios
-- 🔐 Autenticação segura com JWT
-- 📱 Interface responsiva para desktop e mobile
-- ⚡ Integração em tempo real com WhatsApp
-- 🎨 Design moderno inspirado no WhatsApp
+### 🤖 Gerenciamento de Bots
+- **Criação e configuração** de múltiplos bots WhatsApp
+- **Conexão via QR Code** com interface em tempo real
+- **Monitoramento de status** e saúde dos bots
+- **Gestão de sessões** persistentes e seguras
 
-## 📁 Estrutura do Projeto
+### 💬 Sistema de Mensagens
+- **Envio e recebimento** de mensagens em tempo real
+- **Suporte a múltiplos tipos** de mídia (texto, imagem, áudio, vídeo, documentos)
+- **Filtros avançados** por bot, direção, tipo e período
+- **Busca inteligente** em conversas e contatos
+- **Interface intuitiva** para gerenciamento de conversas
 
+### 🎨 Editor Visual de Fluxos
+- **Interface drag-and-drop** para criação de fluxos
+- **Componentes visuais** para diferentes tipos de nós:
+  - **Nó de Mensagem**: Envio de textos e mídias
+  - **Nó de Condição**: Ramificações condicionais (Sim/Não)
+  - **Nó de Delay**: Pausas temporais no fluxo
+  - **Nó de Ação**: Webhooks, transferências, finalizações
+- **Conexões visuais** entre nós com validação
+- **Salvamento automático** de posições e configurações
+
+### 📊 Relatórios e Analytics
+- **Gráficos interativos** de performance
+- **Métricas detalhadas** de mensagens e contatos
+- **Análise temporal** com filtros por período
+- **Comparação de performance** entre bots
+- **Exportação de relatórios** em múltiplos formatos
+
+### 🔐 Segurança e Autenticação
+- **Sistema de autenticação** JWT robusto
+- **Variáveis de ambiente** para configurações sensíveis
+- **Controle de acesso** por usuário
+- **Sessões seguras** e criptografadas
+
+## 🏗️ Arquitetura do Sistema
+
+### Backend (Python/Flask)
 ```
-whatsapp-saas/
-├── whatsapp-saas-backend/          # Backend Flask
-│   ├── src/
-│   │   ├── models/                 # Modelos do banco de dados
-│   │   ├── routes/                 # Rotas da API
-│   │   ├── database/               # Configuração do banco
-│   │   ├── static/                 # Arquivos estáticos
-│   │   ├── whatsapp_manager.py     # Gerenciador do WhatsApp
-│   │   └── main.py                 # Arquivo principal
-│   ├── venv/                       # Ambiente virtual Python
-│   └── requirements.txt            # Dependências Python
-├── whatsapp-saas-frontend/         # Frontend React
-│   ├── src/
-│   │   ├── components/             # Componentes React
-│   │   ├── pages/                  # Páginas da aplicação
-│   │   ├── hooks/                  # Hooks customizados
-│   │   ├── lib/                    # Utilitários e API client
-│   │   └── assets/                 # Assets estáticos
-│   ├── public/                     # Arquivos públicos
-│   └── package.json                # Dependências Node.js
-├── bot-zdg/                        # Bot original (referência)
-└── README.md                       # Esta documentação
+whatsapp-saas-backend/
+├── src/
+│   ├── models/          # Modelos de dados (User, Bot, Flow, etc.)
+│   ├── routes/          # Endpoints da API REST
+│   ├── whatsapp_module/ # Módulo WhatsApp integrado
+│   └── main.py          # Aplicação principal
+├── instance/            # Banco de dados SQLite
+└── requirements.txt     # Dependências Python
 ```
 
-## 🛠️ Instalação e Configuração
+### Frontend (React/Vite)
+```
+whatsapp-saas-frontend/
+├── src/
+│   ├── components/      # Componentes reutilizáveis
+│   │   ├── ui/         # Componentes de interface
+│   │   └── flow/       # Componentes do editor de fluxos
+│   ├── pages/          # Páginas da aplicação
+│   ├── hooks/          # Hooks customizados
+│   └── lib/            # Utilitários e configurações
+└── package.json        # Dependências Node.js
+```
 
-### Pré-requisitos
-- Python 3.11+
-- Node.js 18+
-- npm ou pnpm
+## 🛠️ Tecnologias Utilizadas
 
-### Backend (Flask)
+### Backend
+- **Flask** - Framework web Python
+- **SQLAlchemy** - ORM para banco de dados
+- **Flask-JWT-Extended** - Autenticação JWT
+- **WhatsApp-Web.js** - Integração com WhatsApp
+- **Socket.IO** - Comunicação em tempo real
+- **SQLite** - Banco de dados
 
-1. **Navegue para o diretório do backend:**
+### Frontend
+- **React 18** - Biblioteca de interface
+- **Vite** - Build tool e dev server
+- **ReactFlow** - Editor visual de fluxos
+- **Recharts** - Gráficos e visualizações
+- **Tailwind CSS** - Framework de estilos
+- **Shadcn/ui** - Componentes de interface
+
+## 📋 Pré-requisitos
+
+- **Node.js** 18+ e npm
+- **Python** 3.11+
+- **Git** para controle de versão
+- **Chrome/Chromium** para WhatsApp Web
+
+## 🚀 Instalação e Configuração
+
+### 1. Clone o Repositório
+```bash
+git clone https://github.com/sergiojrali/dashurx.git
+cd dashurx
+```
+
+### 2. Configuração do Backend
 ```bash
 cd whatsapp-saas-backend
-```
 
-2. **Ative o ambiente virtual:**
-```bash
-source venv/bin/activate
-```
+# Criar ambiente virtual
+python3.11 -m venv venv
+source venv/bin/activate  # Linux/Mac
+# ou
+venv\Scripts\activate     # Windows
 
-3. **Instale as dependências:**
-```bash
+# Instalar dependências
 pip install -r requirements.txt
+
+# Configurar variáveis de ambiente
+cp .env.example .env
+# Edite o arquivo .env com suas configurações
 ```
 
-4. **Execute o servidor:**
+### 3. Configuração do Frontend
 ```bash
+cd ../whatsapp-saas-frontend
+
+# Instalar dependências
+npm install --legacy-peer-deps
+
+# Configurar variáveis de ambiente
+cp .env.example .env.local
+# Edite o arquivo .env.local com suas configurações
+```
+
+### 4. Inicialização dos Serviços
+
+#### Backend
+```bash
+cd whatsapp-saas-backend
+source venv/bin/activate
 python src/main.py
 ```
+O backend estará disponível em `http://localhost:5000`
 
-O backend estará disponível em: `http://localhost:5000`
-
-### Frontend (React)
-
-1. **Navegue para o diretório do frontend:**
+#### Frontend
 ```bash
 cd whatsapp-saas-frontend
-```
-
-2. **Instale as dependências:**
-```bash
-npm install
-# ou
-pnpm install
-```
-
-3. **Execute o servidor de desenvolvimento:**
-```bash
 npm run dev
-# ou
-pnpm run dev
 ```
+O frontend estará disponível em `http://localhost:5173`
 
-O frontend estará disponível em: `http://localhost:3000`
+## 🔧 Configuração de Ambiente
 
-## 🔧 Configuração
-
-### Variáveis de Ambiente
-
-**Backend (.env):**
+### Backend (.env)
 ```env
-SECRET_KEY=sua_chave_secreta_aqui
-JWT_SECRET_KEY=sua_chave_jwt_aqui
-DATABASE_URL=sqlite:///database/app.db
+# Segurança
+SECRET_KEY=your-super-secret-key-change-this-in-production
+JWT_SECRET_KEY=your-jwt-secret-key-change-this-in-production
+
+# Banco de Dados
+DATABASE_URL=sqlite:///instance/app.db
+
+# Flask
 FLASK_ENV=development
+FLASK_DEBUG=True
+
+# WhatsApp
+WHATSAPP_BASE_PORT=8000
+
+# CORS
+CORS_ORIGINS=*
 ```
 
-**Frontend (.env):**
+### Frontend (.env.local)
 ```env
-VITE_API_BASE_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:5000/api
+VITE_APP_NAME=DashURX
 ```
 
-### Banco de Dados
+## 📚 Guia de Uso
 
-O sistema usa SQLite por padrão. O banco será criado automaticamente na primeira execução em:
-```
-whatsapp-saas-backend/src/database/app.db
-```
+### 1. Primeiro Acesso
+1. Acesse `http://localhost:5173`
+2. Registre uma nova conta
+3. Faça login com suas credenciais
 
-## 📚 API Endpoints
+### 2. Criando um Bot
+1. Vá para a página "Bots"
+2. Clique em "Novo Bot"
+3. Preencha as informações do bot
+4. Escaneie o QR Code com seu WhatsApp
+5. Aguarde a conexão ser estabelecida
+
+### 3. Criando Fluxos de Conversa
+1. Acesse o bot criado
+2. Clique em "Editar Fluxos"
+3. Use a interface drag-and-drop para criar o fluxo
+4. Adicione nós de mensagem, condição, delay e ação
+5. Conecte os nós conforme a lógica desejada
+6. Salve o fluxo
+
+### 4. Monitoramento
+1. Use a página "Mensagens" para ver conversas
+2. Acesse "Relatórios" para analytics
+3. Monitore o status dos bots no dashboard
+
+## 🔌 API Endpoints
 
 ### Autenticação
-- `POST /api/auth/register` - Registro de usuário
+- `POST /api/auth/register` - Registrar usuário
 - `POST /api/auth/login` - Login
-- `GET /api/auth/profile` - Perfil do usuário
-- `PUT /api/auth/profile` - Atualizar perfil
+- `POST /api/auth/logout` - Logout
 
 ### Bots
 - `GET /api/bots` - Listar bots
@@ -153,67 +221,53 @@ whatsapp-saas-backend/src/database/app.db
 - `DELETE /api/bots/{id}` - Excluir bot
 
 ### Fluxos
-- `GET /api/bots/{id}/flows` - Listar fluxos do bot
-- `POST /api/bots/{id}/flows` - Criar fluxo
+- `GET /api/flows/{id}` - Obter fluxo
 - `PUT /api/flows/{id}` - Atualizar fluxo
-- `DELETE /api/flows/{id}` - Excluir fluxo
+- `POST /api/flows/{id}/nodes` - Criar nó
+- `PUT /api/flows/{id}/nodes/{nodeId}` - Atualizar nó
 
-### WhatsApp
-- `POST /api/whatsapp/bots/{id}/start` - Iniciar bot
-- `POST /api/whatsapp/bots/{id}/stop` - Parar bot
-- `GET /api/whatsapp/bots/{id}/status` - Status do bot
-- `POST /api/whatsapp/bots/{id}/send-message` - Enviar mensagem
+### Mensagens
+- `GET /api/messages` - Listar mensagens
+- `POST /api/messages/send` - Enviar mensagem
 
-## 🎨 Tecnologias Utilizadas
+## 🧪 Testes
 
 ### Backend
-- **Flask** - Framework web Python
-- **SQLAlchemy** - ORM para banco de dados
-- **Flask-JWT-Extended** - Autenticação JWT
-- **Flask-CORS** - Suporte a CORS
-- **WhatsApp-Web.js** - Integração com WhatsApp
+```bash
+cd whatsapp-saas-backend
+source venv/bin/activate
+python -m pytest tests/
+```
 
 ### Frontend
-- **React 18** - Biblioteca JavaScript
-- **Vite** - Build tool e dev server
-- **Tailwind CSS** - Framework CSS
-- **shadcn/ui** - Componentes UI
-- **Lucide React** - Ícones
-- **Recharts** - Gráficos e visualizações
-- **React Router** - Roteamento
+```bash
+cd whatsapp-saas-frontend
+npm run test
+```
 
-## 🔐 Segurança
-
-- Autenticação JWT com tokens seguros
-- Validação de dados no backend e frontend
-- Sanitização de inputs
-- CORS configurado adequadamente
-- Senhas hasheadas com bcrypt
-
-## 📱 Responsividade
-
-O sistema é totalmente responsivo e funciona em:
-- 💻 Desktop (1024px+)
-- 📱 Tablet (768px - 1023px)
-- 📱 Mobile (320px - 767px)
-
-## 🚀 Deploy
+## 📦 Deploy
 
 ### Desenvolvimento
 O sistema está configurado para desenvolvimento local. Para produção, considere:
 
-1. **Backend:**
-   - Use um servidor WSGI como Gunicorn
-   - Configure um banco PostgreSQL ou MySQL
-   - Use variáveis de ambiente para configurações sensíveis
+1. **Banco de dados**: Migrar para PostgreSQL ou MySQL
+2. **Variáveis de ambiente**: Configurar adequadamente
+3. **HTTPS**: Implementar certificados SSL
+4. **Proxy reverso**: Usar Nginx ou similar
+5. **Monitoramento**: Implementar logs e métricas
 
-2. **Frontend:**
-   - Execute `npm run build` para gerar os arquivos de produção
-   - Sirva os arquivos estáticos com nginx ou similar
+### Docker (Opcional)
+```bash
+# Build das imagens
+docker-compose build
+
+# Iniciar serviços
+docker-compose up -d
+```
 
 ## 🤝 Contribuição
 
-1. Faça um fork do projeto
+1. Fork o projeto
 2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
 3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
 4. Push para a branch (`git push origin feature/AmazingFeature`)
@@ -221,16 +275,40 @@ O sistema está configurado para desenvolvimento local. Para produção, conside
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## 📞 Suporte
+## 🆘 Suporte
 
-Para suporte e dúvidas:
-- 📧 Email: suporte@whatsappsaas.com
-- 💬 WhatsApp: +55 11 99999-9999
-- 🌐 Website: https://whatsappsaas.com
+- **Issues**: [GitHub Issues](https://github.com/sergiojrali/dashurx/issues)
+- **Documentação**: [Wiki do Projeto](https://github.com/sergiojrali/dashurx/wiki)
+- **Email**: suporte@dashurx.com
+
+## 🎯 Roadmap
+
+### Próximas Funcionalidades
+- [ ] **Integração com APIs externas** (CRM, E-commerce)
+- [ ] **Templates de fluxos** pré-configurados
+- [ ] **Análise de sentimento** em mensagens
+- [ ] **Chatbot com IA** integrado
+- [ ] **Agendamento de mensagens** em massa
+- [ ] **Relatórios avançados** com BI
+- [ ] **App mobile** para gerenciamento
+- [ ] **Integração com Zapier** e Make
+
+### Melhorias Técnicas
+- [ ] **Testes automatizados** completos
+- [ ] **CI/CD pipeline** com GitHub Actions
+- [ ] **Documentação da API** com Swagger
+- [ ] **Monitoramento** com Prometheus/Grafana
+- [ ] **Cache** com Redis
+- [ ] **Filas** para processamento assíncrono
 
 ---
 
-**Desenvolvido com ❤️ para automatizar conversas no WhatsApp**
+**Desenvolvido com ❤️ pela equipe DashURX**
+
+![GitHub stars](https://img.shields.io/github/stars/sergiojrali/dashurx?style=social)
+![GitHub forks](https://img.shields.io/github/forks/sergiojrali/dashurx?style=social)
+![GitHub issues](https://img.shields.io/github/issues/sergiojrali/dashurx)
+![GitHub license](https://img.shields.io/github/license/sergiojrali/dashurx)
 
