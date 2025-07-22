@@ -64,7 +64,7 @@ def register():
         db.session.commit()
         
         # Criar token de acesso
-        access_token = create_access_token(identity=user.id)
+        access_token = create_access_token(identity=str(user.id))
         
         return jsonify({
             'message': 'Usuário criado com sucesso',
@@ -100,7 +100,7 @@ def login():
             return jsonify({'error': 'Conta desativada'}), 401
         
         # Criar token de acesso
-        access_token = create_access_token(identity=user.id)
+        access_token = create_access_token(identity=str(user.id))
         
         return jsonify({
             'message': 'Login realizado com sucesso',
@@ -117,7 +117,7 @@ def login():
 def get_profile():
     try:
         user_id = get_jwt_identity()
-        user = User.query.get(user_id)
+        user = User.query.get(int(user_id))
         
         if not user:
             return jsonify({'error': 'Usuário não encontrado'}), 404
@@ -132,7 +132,7 @@ def get_profile():
 def update_profile():
     try:
         user_id = get_jwt_identity()
-        user = User.query.get(user_id)
+        user = User.query.get(int(user_id))
         
         if not user:
             return jsonify({'error': 'Usuário não encontrado'}), 404
@@ -149,7 +149,7 @@ def update_profile():
             if not validate_email(email):
                 return jsonify({'error': 'Email inválido'}), 400
             # Verificar se email já está em uso por outro usuário
-            existing_user = User.query.filter(User.email == email, User.id != user_id).first()
+            existing_user = User.query.filter(User.email == email, User.id != int(user_id)).first()
             if existing_user:
                 return jsonify({'error': 'Email já está em uso'}), 400
             user.email = email
@@ -170,7 +170,7 @@ def update_profile():
 def change_password():
     try:
         user_id = get_jwt_identity()
-        user = User.query.get(user_id)
+        user = User.query.get(int(user_id))
         
         if not user:
             return jsonify({'error': 'Usuário não encontrado'}), 404
