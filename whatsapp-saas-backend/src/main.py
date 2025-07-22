@@ -17,6 +17,7 @@ from src.routes.auth import auth_bp
 from src.routes.bots import bots_bp
 from src.routes.flows import flows_bp
 from src.routes.whatsapp import whatsapp_bp
+from src.routes.whatsapp_sessions import whatsapp_sessions_bp
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 
@@ -36,6 +37,7 @@ app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(bots_bp, url_prefix='/api')
 app.register_blueprint(flows_bp, url_prefix='/api')
 app.register_blueprint(whatsapp_bp, url_prefix='/api/whatsapp')
+app.register_blueprint(whatsapp_sessions_bp, url_prefix='/api/whatsapp-sessions')
 
 # Configurar banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"

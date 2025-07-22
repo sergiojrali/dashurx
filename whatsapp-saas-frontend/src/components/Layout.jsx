@@ -21,6 +21,7 @@ import {
   LogOut,
   User,
   Home,
+  Smartphone,
 } from 'lucide-react';
 import './Layout.css';
 
@@ -33,6 +34,7 @@ const Layout = ({ children }) => {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
     { name: 'Bots', href: '/bots', icon: Bot },
+    { name: 'Sessões WhatsApp', href: '/whatsapp-sessions', icon: Smartphone },
     { name: 'Mensagens', href: '/messages', icon: MessageSquare },
     { name: 'Relatórios', href: '/reports', icon: BarChart3 },
     { name: 'Configurações', href: '/settings', icon: Settings },

@@ -1,0 +1,30 @@
+{
+  "name": "whatsapp-saas-backend",
+  "version": "1.0.0",
+  "description": "WhatsApp SaaS Backend with session management",
+  "main": "src/main.py",
+  "scripts": {
+    "start": "python3 src/main.py",
+    "dev": "python3 src/main.py"
+  },
+  "dependencies": {
+    "whatsapp-web.js": "^1.23.0",
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "qrcode": "^1.5.3",
+    "express-validator": "^7.0.1",
+    "express-fileupload": "^1.4.0",
+    "axios": "^1.5.0",
+    "mime-types": "^2.1.35"
+  },
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "saas",
+    "flask",
+    "nodejs"
+  ],
+  "author": "DashURX Team",
+  "license": "MIT"
+}
+

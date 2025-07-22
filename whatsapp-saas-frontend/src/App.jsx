@@ -9,6 +9,7 @@ import Bots from './pages/Bots';
 import Messages from './pages/Messages';
 import Reports from './pages/Reports';
 import FlowEditor from './pages/FlowEditor';
+import WhatsAppSessions from './pages/WhatsAppSessions';
 import './App.css';
 
 // Componente para proteger rotas
@@ -105,6 +106,17 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Reports />
+                </Layout>
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/whatsapp-sessions" 
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <WhatsAppSessions />
                 </Layout>
               </ProtectedRoute>
             } 
