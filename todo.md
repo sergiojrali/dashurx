@@ -19,9 +19,12 @@
   - [x] Melhorar o gerenciamento de QR Code e dados de sessão no `whatsapp_manager.py` (captura, exibição e persistência).
   - [x] Tornar o caminho `bot-zdg` configurável no `whatsapp_manager.py`.
   - [x] Integrar módulo WhatsApp diretamente no sistema (sem dependência externa).
-- [ ] **Novas Funcionalidades:**
-  - [ ] Implementar funcionalidade de agendamento de mensagens.
-  - [ ] Desenvolver interface de criação de fluxos visual (drag-and-drop).
+- [x] **Novas Funcionalidades:**
+  - [x] Implementar funcionalidade de agendamento de mensagens.
+  - [x] Desenvolver interface de criação de fluxos visual (drag-and-drop).
+  - [x] Criar página de mensagens completa com filtros e busca.
+  - [x] Criar página de relatórios com gráficos e estatísticas.
+  - [x] Implementar editor visual de fluxos com ReactFlow.
   - [ ] Implementar notificações em tempo real (WebSockets) para status do bot e novas mensagens.
 - [ ] **Escalabilidade e Robustez:**
   - [ ] Adicionar suporte a múltiplos bancos de dados (PostgreSQL, MySQL) no backend.

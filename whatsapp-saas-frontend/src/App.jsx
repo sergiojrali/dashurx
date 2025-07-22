@@ -6,6 +6,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Bots from './pages/Bots';
+import Messages from './pages/Messages';
+import Reports from './pages/Reports';
+import FlowEditor from './pages/FlowEditor';
 import './App.css';
 
 // Componente para proteger rotas
@@ -90,10 +93,7 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <div className="text-center py-20">
-                    <h2 className="text-2xl font-bold mb-4">Página de Mensagens</h2>
-                    <p className="text-muted-foreground">Em desenvolvimento...</p>
-                  </div>
+                  <Messages />
                 </Layout>
               </ProtectedRoute>
             } 
@@ -104,11 +104,17 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <div className="text-center py-20">
-                    <h2 className="text-2xl font-bold mb-4">Página de Relatórios</h2>
-                    <p className="text-muted-foreground">Em desenvolvimento...</p>
-                  </div>
+                  <Reports />
                 </Layout>
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/bots/:botId/flows/:flowId" 
+            element={
+              <ProtectedRoute>
+                <FlowEditor />
               </ProtectedRoute>
             } 
           />
