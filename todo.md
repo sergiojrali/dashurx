@@ -1,39 +1,51 @@
-## Tarefas para o desenvolvimento do sistema SaaS de bot de WhatsApp
+# Tarefas para o Projeto DashURX
 
-### Fase 1: Análise do sistema existente
-- [x] Clonar o repositório do bot de WhatsApp
-- [x] Analisar `package.json` para entender as dependências
-- [x] Analisar `app.js` para entender as funcionalidades e a lógica do bot
+## Fase 3: Análise detalhada do código e identificação de melhorias
+- [x] Analisar `whatsapp-saas-backend/src/main.py`
+- [ ] Mover SECRET_KEY e JWT_SECRET_KEY para variáveis de ambiente no backend
+- [x] Analisar `whatsapp-saas-backend/src/models/`
+- [x] Analisar `whatsapp-saas-backend/src/routes/`
+- [x] Analisar `whatsapp-saas-backend/src/whatsapp_manager.py`
+- [ ] Tornar o caminho `bot-zdg` configurável no `whatsapp_manager.py`
+- [ ] Melhorar o gerenciamento de QR Code e dados de sessão no `whatsapp_manager.py`
+- [x] Analisar `whatsapp-saas-frontend/src/main.jsx`
+- [x] Analisar `whatsapp-saas-frontend/src/App.jsx`
+- [x] Analisar `whatsapp-saas-frontend/src/pages/`
+- [x] Analisar `whatsapp-saas-frontend/src/components/`
+- [x] Identificar melhorias e novas funcionalidades
+- [x] **Melhorias de Segurança:**
+  - [x] Mover `SECRET_KEY` e `JWT_SECRET_KEY` para variáveis de ambiente no backend (`whatsapp-saas-backend/src/main.py`).
+- [x] **Gerenciamento de Bots:**
+  - [x] Melhorar o gerenciamento de QR Code e dados de sessão no `whatsapp_manager.py` (captura, exibição e persistência).
+  - [x] Tornar o caminho `bot-zdg` configurável no `whatsapp_manager.py`.
+  - [x] Integrar módulo WhatsApp diretamente no sistema (sem dependência externa).
+- [ ] **Novas Funcionalidades:**
+  - [ ] Implementar funcionalidade de agendamento de mensagens.
+  - [ ] Desenvolver interface de criação de fluxos visual (drag-and-drop).
+  - [ ] Implementar notificações em tempo real (WebSockets) para status do bot e novas mensagens.
+- [ ] **Escalabilidade e Robustez:**
+  - [ ] Adicionar suporte a múltiplos bancos de dados (PostgreSQL, MySQL) no backend.
+  - [ ] Melhorar a gestão de erros e logs no backend e frontend.
+  - [ ] Otimizar performance do backend e frontend.
 
-### Fase 2: Planejamento da arquitetura SaaS
-- [x] Definir a arquitetura geral do sistema (microserviços, monolítico, etc.)
-- [x] Escolher as tecnologias para o backend (Node.js/Express, Python/Flask, etc.)
-- [x] Escolher as tecnologias para o frontend (React, Angular, Vue.js, etc.)
-- [x] Definir o esquema do banco de dados para armazenar configurações de bots, fluxos, usuários, etc.
-- [x] Esboçar as APIs necessárias para o gerenciamento do sistema.
+## Fase 4: Implementação de novas funcionalidades e melhorias
+- [ ] Implementar autenticação de dois fatores (2FA)
+- [ ] Adicionar funcionalidade de agendamento de mensagens
+- [ ] Melhorar a interface de criação de fluxos (drag-and-drop)
+- [ ] Implementar notificações em tempo real (WebSockets)
+- [ ] Adicionar suporte a múltiplos bancos de dados (PostgreSQL, MySQL)
+- [ ] Melhorar a gestão de erros e logs
+- [ ] Otimizar performance do backend e frontend
 
-### Fase 3: Desenvolvimento do backend robusto
-- [x] Implementar autenticação e autorização de usuários.
-- [x] Criar APIs para gerenciamento de bots (criação, edição, exclusão).
-- [x] Desenvolver APIs para configuração de fluxos de conversa (nós, transições, respostas).
-- [x] Implementar a lógica para integração com o `whatsapp-web.js` e gerenciamento de múltiplas instâncias de bots.
-- [x] Configurar o banco de dados e modelos de dados.
+## Fase 5: Testes e validação do sistema completo
+- [ ] Realizar testes unitários
+- [ ] Realizar testes de integração
+- [ ] Realizar testes de ponta a ponta
+- [ ] Testar responsividade em diferentes dispositivos
 
-### Fase 4: Desenvolvimento do frontend SaaS
-- [x] Criar interface de usuário para login e gerenciamento de contas.
-- [ ] Desenvolver painel de controle para visualização e gerenciamento de bots.
-- [ ] Implementar editor de fluxo de conversa visual (drag-and-drop, etc.).
-- [ ] Criar telas para configuração de respostas, mídias e outras opções do bot.
-- [ ] Garantir design responsivo e experiência de usuário intuitiva.
+## Fase 6: Documentação e entrega final
+- [ ] Atualizar README.md com novas funcionalidades e instruções de uso
+- [ ] Criar documentação técnica detalhada
+- [ ] Preparar para deploy em produção
 
-### Fase 5: Integração e testes
-- [ ] Conectar o frontend com o backend através das APIs.
-- [ ] Realizar testes unitários e de integração para todas as funcionalidades.
-- [ ] Testar o fluxo completo de criação e execução de um bot.
-- [ ] Realizar testes de desempenho e segurança.
-
-### Fase 6: Empacotamento e entrega
-- [ ] Preparar o projeto para implantação (Docker, scripts de inicialização, etc.).
-- [ ] Compactar todos os arquivos do projeto.
-- [ ] Fornecer instruções detalhadas para a instalação e execução do sistema.
 

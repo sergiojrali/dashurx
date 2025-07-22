@@ -3,6 +3,7 @@ import sys
 import json
 import threading
 import time
+import requests
 from datetime import datetime
 from typing import Dict, Optional
 import subprocess
@@ -13,8 +14,11 @@ class WhatsAppManager:
     
     def __init__(self):
         self.instances: Dict[int, Dict] = {}  # bot_id -> instance_data
-        self.base_port = 8000
-        self.bot_zdg_path = "/home/ubuntu/bot-zdg"
+        self.base_port = int(os.getenv('WHATSAPP_BASE_PORT', 8000))
+        self.whatsapp_module_path = os.path.join(
+            os.path.dirname(__file__), 
+            'whatsapp_module'
+        )
         
     def create_instance(self, bot_id: int, bot_data: dict) -> bool:
         """Cria uma nova instância do bot"""
@@ -23,28 +27,19 @@ class WhatsAppManager:
                 self.stop_instance(bot_id)
             
             port = self.base_port + bot_id
-            instance_dir = f"/tmp/bot_instance_{bot_id}"
             
-            # Criar diretório da instância
-            os.makedirs(instance_dir, exist_ok=True)
+            # Criar diretório de sessões se não existir
+            sessions_dir = os.path.join(self.whatsapp_module_path, 'sessions')
+            os.makedirs(sessions_dir, exist_ok=True)
             
-            # Copiar arquivos do bot base
-            subprocess.run([
-                'cp', '-r', f"{self.bot_zdg_path}/.", instance_dir
-            ], check=True)
-            
-            # Modificar o arquivo app.js para esta instância
-            self._customize_bot_instance(instance_dir, bot_id, bot_data, port)
-            
-            # Instalar dependências
-            subprocess.run([
-                'npm', 'install'
-            ], cwd=instance_dir, check=True)
+            # Configurar argumentos para o bot
+            bot_script = os.path.join(self.whatsapp_module_path, 'whatsapp_bot.js')
+            webhook_url = bot_data.get('webhook_url', '')
             
             # Iniciar o processo do bot
             process = subprocess.Popen([
-                'node', 'app.js'
-            ], cwd=instance_dir, 
+                'node', bot_script, str(bot_id), str(port), webhook_url
+            ], cwd=self.whatsapp_module_path,
                stdout=subprocess.PIPE, 
                stderr=subprocess.PIPE,
                env={**os.environ, 'PORT': str(port)})
@@ -52,11 +47,21 @@ class WhatsAppManager:
             self.instances[bot_id] = {
                 'process': process,
                 'port': port,
-                'instance_dir': instance_dir,
                 'status': 'starting',
                 'created_at': datetime.utcnow(),
-                'bot_data': bot_data
+                'bot_data': bot_data,
+                'qr_code': None
             }
+            
+            # Aguardar um pouco para o processo inicializar
+            time.sleep(3)
+            
+            # Verificar se o processo ainda está rodando
+            if process.poll() is not None:
+                # Processo falhou
+                stderr_output = process.stderr.read().decode('utf-8')
+                print(f"Erro ao iniciar bot {bot_id}: {stderr_output}")
+                return False
             
             # Monitorar o processo em thread separada
             threading.Thread(
@@ -91,11 +96,6 @@ class WhatsAppManager:
                 process.kill()
                 process.wait()
             
-            # Limpar diretório da instância
-            instance_dir = instance['instance_dir']
-            if os.path.exists(instance_dir):
-                subprocess.run(['rm', '-rf', instance_dir])
-            
             del self.instances[bot_id]
             return True
             
@@ -103,7 +103,7 @@ class WhatsAppManager:
             print(f"Erro ao parar instância do bot {bot_id}: {e}")
             return False
     
-    def get_instance_status(self, bot_id: int) -> Optional[str]:
+    def get_instance_status(self, bot_id: int) -> Optional[dict]:
         """Retorna o status de uma instância"""
         if bot_id not in self.instances:
             return None
@@ -111,15 +111,41 @@ class WhatsAppManager:
         instance = self.instances[bot_id]
         process = instance['process']
         
-        if process.poll() is None:
-            return instance['status']
-        else:
-            return 'stopped'
+        if process.poll() is not None:
+            return {'status': 'stopped', 'message': 'Processo parado'}
+        
+        # Tentar obter status via API
+        try:
+            port = instance['port']
+            response = requests.get(f'http://localhost:{port}/status', timeout=5)
+            if response.status_code == 200:
+                status_data = response.json()
+                instance['status'] = status_data.get('status', 'unknown')
+                instance['qr_code'] = status_data.get('qrCode')
+                return status_data
+        except requests.RequestException:
+            pass
+        
+        return {
+            'status': instance['status'],
+            'qrCode': instance.get('qr_code')
+        }
     
     def get_instance_qr(self, bot_id: int) -> Optional[str]:
         """Retorna o QR code de uma instância"""
-        # Implementar lógica para capturar QR code
-        # Por enquanto retorna None
+        if bot_id not in self.instances:
+            return None
+            
+        try:
+            port = self.instances[bot_id]['port']
+            response = requests.get(f'http://localhost:{port}/qr', timeout=5)
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('status'):
+                    return data.get('qrCode')
+        except requests.RequestException:
+            pass
+        
         return None
     
     def send_message(self, bot_id: int, number: str, message: str) -> bool:
@@ -128,13 +154,9 @@ class WhatsAppManager:
             if bot_id not in self.instances:
                 return False
             
-            instance = self.instances[bot_id]
-            port = instance['port']
+            port = self.instances[bot_id]['port']
             
-            # Fazer requisição HTTP para a API do bot
-            import requests
-            
-            response = requests.post(f'http://localhost:{port}/zdg-message', json={
+            response = requests.post(f'http://localhost:{port}/send-message', json={
                 'number': number,
                 'message': message
             }, timeout=30)
@@ -145,21 +167,17 @@ class WhatsAppManager:
             print(f"Erro ao enviar mensagem pelo bot {bot_id}: {e}")
             return False
     
-    def send_media(self, bot_id: int, number: str, file_url: str, caption: str = '') -> bool:
+    def send_media(self, bot_id: int, number: str, media_url: str, caption: str = '') -> bool:
         """Envia mídia através de uma instância"""
         try:
             if bot_id not in self.instances:
                 return False
             
-            instance = self.instances[bot_id]
-            port = instance['port']
+            port = self.instances[bot_id]['port']
             
-            # Fazer requisição HTTP para a API do bot
-            import requests
-            
-            response = requests.post(f'http://localhost:{port}/zdg-media', json={
+            response = requests.post(f'http://localhost:{port}/send-media', json={
                 'number': number,
-                'file': file_url,
+                'mediaUrl': media_url,
                 'caption': caption
             }, timeout=30)
             
@@ -168,59 +186,6 @@ class WhatsAppManager:
         except Exception as e:
             print(f"Erro ao enviar mídia pelo bot {bot_id}: {e}")
             return False
-    
-    def _customize_bot_instance(self, instance_dir: str, bot_id: int, bot_data: dict, port: int):
-        """Customiza a instância do bot com configurações específicas"""
-        app_js_path = os.path.join(instance_dir, 'app.js')
-        
-        # Ler o arquivo app.js original
-        with open(app_js_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-        
-        # Modificar configurações
-        content = content.replace(
-            "const port = process.env.PORT || 8000;",
-            f"const port = process.env.PORT || {port};"
-        )
-        
-        # Modificar clientId para ser único
-        content = content.replace(
-            "authStrategy: new LocalAuth({ clientId: 'bot-zdg' }),",
-            f"authStrategy: new LocalAuth({{ clientId: 'bot-{bot_id}' }}),"
-        )
-        
-        # Adicionar webhook se configurado
-        if bot_data.get('webhook_url'):
-            webhook_code = f"""
-// Webhook para bot {bot_id}
-const webhookUrl = '{bot_data['webhook_url']}';
-
-client.on('message', async msg => {{
-    if (webhookUrl) {{
-        try {{
-            await axios.post(webhookUrl, {{
-                bot_id: {bot_id},
-                message: {{
-                    from: msg.from,
-                    body: msg.body,
-                    type: msg.type,
-                    timestamp: new Date().toISOString()
-                }}
-            }});
-        }} catch (error) {{
-            console.log('Erro ao enviar webhook:', error.message);
-        }}
-    }}
-}});
-"""
-            content = content.replace(
-                "client.on('message', async msg => {",
-                webhook_code + "\n\nclient.on('message', async msg => {"
-            )
-        
-        # Salvar arquivo modificado
-        with open(app_js_path, 'w', encoding='utf-8') as f:
-            f.write(content)
     
     def _monitor_instance(self, bot_id: int):
         """Monitora uma instância do bot"""
@@ -233,14 +198,14 @@ client.on('message', async msg => {{
                 if process.poll() is not None:
                     # Processo parou
                     instance['status'] = 'stopped'
+                    print(f"Bot {bot_id} parou inesperadamente")
                     break
                 
-                # Verificar se está conectado (implementar lógica específica)
-                # Por enquanto, apenas marca como ativo após 30 segundos
-                if instance['status'] == 'starting':
-                    elapsed = (datetime.utcnow() - instance['created_at']).seconds
-                    if elapsed > 30:
-                        instance['status'] = 'active'
+                # Verificar status via API
+                status_data = self.get_instance_status(bot_id)
+                if status_data:
+                    instance['status'] = status_data.get('status', 'unknown')
+                    instance['qr_code'] = status_data.get('qrCode')
                 
                 time.sleep(5)  # Verificar a cada 5 segundos
                 
