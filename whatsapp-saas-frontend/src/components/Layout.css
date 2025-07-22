@@ -1,0 +1,49 @@
+/* Estilos específicos para o Layout */
+.sidebar-transition {
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-overlay {
+  backdrop-filter: blur(4px);
+}
+
+/* Animações suaves para navegação */
+.nav-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-item:hover {
+  transform: translateX(2px);
+}
+
+/* Efeito de hover no avatar */
+.avatar-hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.avatar-hover:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Gradiente personalizado para o logo */
+.logo-gradient {
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+}
+
+/* Efeito de brilho no header */
+.header-glow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* Responsividade melhorada */
+@media (max-width: 1024px) {
+  .sidebar-mobile {
+    transform: translateX(100%);
+  }
+  
+  .sidebar-mobile.open {
+    transform: translateX(0);
+  }
+}
+
